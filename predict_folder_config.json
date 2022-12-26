@@ -1,0 +1,8 @@
+{"script_name": "./import_data/run_classifier_test.py",
+ "pretrain_model_dir": "./import_data",
+ "finetune_mode_dir": "./v3_BERT-Base-Uncased_512_esg_transfer_1001_2022_09_29_aug",
+ "data_dir": "./esgBERT_input",
+ "output_table_dir": "./esgBERT_output",
+ "checkpoint": "sequence256_batch32_epoch100",
+ "output_dir": "./tmp_model_output",
+ "max_seq_length": 256}
