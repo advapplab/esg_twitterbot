@@ -4,6 +4,8 @@ Step1. Docker run container use tensorflow image
 ```bash
 docker run -d --gpus all --name esgTwitterPost -p 8889:8888 tensorflow/tensorflow:1.15.0-gpu-jupyter
 ```
+Step1.5. Open jupyter notebook & New a terminal to do Step 2 ~ 7
+
 Step2.  Linux APT NO_PUBKEY cause GPG error solution
 ```bash
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A4B469963BF863CC && apt update -y
