@@ -1,0 +1,10 @@
+# Credential data
+modules/credential.json
+# folder
+__pycache__/
+.ipynb_checkpoints/
+
+# keep the empty folder
+v3_BERT-Base-Uncased_512_esg_transfer_1001_2022_09_29_aug/*
+
+*.log

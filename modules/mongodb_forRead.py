@@ -1,5 +1,5 @@
 import pymongo
-from mongodb_static_data import StaticData
+import modules.mongodb_static_data as mongodb
 
 class MongoDB:
     
@@ -9,13 +9,13 @@ class MongoDB:
         test = 'test'  # For developer
     
     def __init__(self):
-        self.__connection = 'mongodb+srv://{}:{}@{}/'.format(StaticData.MGDB_USERNAME, StaticData.MGDB_PASSWORD, StaticData.MGDB_HOST)
+        self.__connection = 'mongodb+srv://{}:{}@{}/'.format(mongodb.StaticData.MGDB_USERNAME, mongodb.StaticData.MGDB_PASSWORD, mongodb.StaticData.MGDB_HOST)
         self.__client = None
         self.__database = None
         self.__collection = None
 
     # build connect to MongoDB
-    def __establish_connection(self, database=StaticData.MGDB_DATABASE, collection=None):
+    def __establish_connection(self, database=mongodb.StaticData.MGDB_DATABASE, collection=None):
         self.__client = pymongo.MongoClient(self.__connection)
         self.__database = self.__client[database]
         self.__collection = self.__database[collection]

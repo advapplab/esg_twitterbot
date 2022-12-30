@@ -14,7 +14,7 @@ from modules.secret import setup_api_key
 mongoDB_connection = MongoDB()
 currTime = int(time.time())
 today = time.localtime(currTime)
-today_to_timestamp = time.mktime((today.tm_year, today.tm_mon, today.tm_mday,8,0,0,0,0,0)) # mktime -> GTC+0 timestamp
+today_to_timestamp = time.mktime((today.tm_year, today.tm_mon, today.tm_mday,0,0,0,0,0,0)) # mktime -> GTC+0 timestamp
 prevDayNews = mongoDB_connection.read_prev24hrs_news(today_to_timestamp)
 if not prevDayNews: 
     print("There is no esg-related news today!")
@@ -49,7 +49,8 @@ all_df.index.name = "ESG news"
 
 esgNews = pd.read_csv("./esgBERT_input/esgNews_{}.tsv".format(date), sep='\t', names=['idx', 'sentence'], index_col=0)
 most_ky_sentences = [esgNews.iloc[idx]["sentence"] for idx in one_hot_df.loc[one_hot_df[all_df.idxmax().values[0]] == 1].index]
-most_ky_sentences = random.sample(most_ky_sentences,30) # Choose random 30 sentences from most counts key issue
+choose_count = 30 if len(most_ky_sentences) >= 30 else len(most_ky_sentences)
+most_ky_sentences = random.sample(most_ky_sentences,choose_count) # Choose random 30 sentences from most counts key issue
 
 # Add api key to env (including GPT-3 & Tweet API token)
 setup_api_key()
@@ -57,7 +58,7 @@ setup_api_key()
 openai.organization = "org-hpKR7cri3YnOlgPZqIAZXtZv"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 prompt_input = '\n'.join(most_ky_sentences) + "\nPost a brief tweet to summarize the news above [IMPORTANT: Less than 280 characters]:\n"
-error_flag = True
+response, error_flag = None, True
 for _ in range(10):
   try:
       response = openai.Completion.create(
@@ -69,13 +70,15 @@ for _ in range(10):
         frequency_penalty=0.0,
         presence_penalty=0.0
       )
+      if len(response['choices'][0].text) > 280: continue
       error_flag = False
       break
   except Exception: 
     time.sleep(60)
     continue
 if error_flag:
-  print("GPT-3 is not calling success, please check!")
+  print("GPT-3 is not calling success or Generated-text is too long, please check!")
+  print("GPT API response: ",response)
   sys.exit()
 tweet = response['choices'][0].text
 
