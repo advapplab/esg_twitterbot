@@ -32,7 +32,7 @@ Step5. Pip install from the given requirements file
  ```bash
  pip install -r requirements3.7.txt
  ```
-Step6. Git clone this project in tf folder && Execute python script to download finetune model
+Step6. Git clone this project in tf folder && Execute python script to download finetune model (About 2hrs)
   ```bash
   git clone https://github.com/advapplab/esg_twitterbot.git
   cd esg_twitterbot
