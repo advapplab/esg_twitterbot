@@ -1,10 +1,12 @@
 # Credential data
 modules/credential.json
+# Playground jupyter notebook
+esgTwitterPost_playground.ipynb
 # folder
 __pycache__/
 .ipynb_checkpoints/
 
 # keep the empty folder
-v3_BERT-Base-Uncased_512_esg_transfer_1001_2022_09_29_aug/*
+finetune_model_latest_twitterbot/*
 
 *.log
