@@ -39,7 +39,7 @@ class MongoDB:
             self.__establish_connection(collection='news_content')
             query = { "$and" : [ { "timestamp" : {"$gte" : currTime - 86400 } }, { "timestamp" : {"$lt" : currTime } } ] }
             content = self.__collection.find(query)
-            prevDayNews = [ eachNew['content'] for eachNew in content ]
+            prevDayNews = [ {"content": eachNew["content"], "url": eachNew["url"], "datasource": eachNew["datasource"]} for eachNew in content ]
             return prevDayNews
         except Exception as e:
             print(e)

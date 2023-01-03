@@ -18,11 +18,11 @@ apt install -y --no-install-recommends make build-essential libssl-dev zlib1g-de
 libreadline-dev libsqlite3-dev git cron nano wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev \
 libxmlsec1-dev libffi-dev liblzma-dev libgirepository1.0-dev libcairo2 libcairo2-dev
 ```
-Step4. Install & Setup Pyenv environment
+Step4. Install (would take about 10 minutes)&  Setup Pyenv environment
 ```bash
 curl https://pyenv.run | bash
 echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc && echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc && echo 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init -)"\nfi' >> ~/.bashrc
-echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile && echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile && echo 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init -)"\nfi' >> ~/.prof
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile && echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile && echo 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init -)"\nfi' >> ~/.profile
 bash # Restarting the shell can read new .bashrc
 pyenv install 3.7.16 && pyenv global 3.7.16
 ```

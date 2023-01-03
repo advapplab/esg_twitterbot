@@ -21,15 +21,16 @@ if not prevDayNews:
     sys.exit()
 
 # ESG News sentence segmenter
-esgNews = pd.Series([],dtype=pd.StringDtype()) 
+esgNews = pd.DataFrame(columns=["content", "url", "datasource"])
 seg = pysbd.Segmenter(language="en", clean=False)
 for eachNew in prevDayNews:
-    newSentences = seg.segment(eachNew)
-    esgNews = pd.concat([esgNews, pd.Series([sentence.replace('\xa0',' ') for sentence in newSentences])], ignore_index=True)
+    newSentences = seg.segment(eachNew["content"])
+    esgNews = pd.concat([esgNews, pd.DataFrame([{"content": sentence.replace('\xa0',' '), "url": eachNew["url"], "datasource": eachNew["datasource"]} for sentence in newSentences])], ignore_index = True)
 
 # Write to TSV file
 date = str(today.tm_year) + str(today.tm_mon) + str(today.tm_mday)
-esgNews.to_csv("./esgBERT_input/esgNews_{}.tsv".format(date), sep='\t', header=False)
+esgNews.to_csv("./esgBERT_input/esgNews_{}_full.tsv".format(date), sep='\t', header=False) # Columns contain content, url, datasource
+esgNews["content"].to_csv("./esgBERT_input/esgNews_{}.tsv".format(date), sep='\t', header=False) # Column only content
 print("esgBERT input is ready!")
 
 # Build the predict model
@@ -55,7 +56,6 @@ most_ky_sentences = random.sample(most_ky_sentences,choose_count) # Choose rando
 # Add api key to env (including GPT-3 & Tweet API token)
 setup_api_key()
 
-openai.organization = "org-hpKR7cri3YnOlgPZqIAZXtZv"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 prompt_input = '\n'.join(most_ky_sentences) + "\nPost a brief tweet to summarize the news above [IMPORTANT: Less than 280 characters]:\n"
 response, error_flag = None, True
