@@ -1,4 +1,36 @@
 # esg_twitterbot
+## Brief Intro Folder tree
+```bash
+.
+├── README.md---
+├── download_finetune_model.py # Download finetune model from S3
+├── esgBERT_input # Read everyday ESG news from MongoDB
+│   ├── esgNews_{date}.tsv # Model input (only content)
+│   ├── esgNews_{date}_full.tsv # Contain content, url, datasource
+├── esgBERT_output 
+│   ├── esgNews_{date}_table.csv # Merge esgBERT output into a 35 key issues table
+│   ├── esgNews_{date}_choose_sentences.csv # The GPT-3 input sentences
+├── esgTwitterPost.py # Main python script
+├── import_data # esgBERT necessary files
+│   ├── bert_config.json
+│   ├── label.json
+│   ├── modeling.py
+│   ├── optimization.py
+│   ├── run_classifier_test.py
+│   ├── tokenization.py
+│   └── vocab.txt
+├── log
+│   ├── esgDaily{date}.log
+├── modules
+│   ├── PredictModel.py # esgBERT model
+│   ├── credential.json # AWS, MongoDB, OpenAI, Twitter key (Owner: wei)
+│   ├── mongodb_forRead.py # MongoDB API
+│   ├── mongodb_static_data.py # MongoDB connection
+│   └── secret.py # OpenAI, Twitter key setting
+├── predict_folder_config.json # Folder path using by esgBERT
+└── requirements3.7.txt
+```
+## Installing Step
 Step1. Docker run container use tensorflow image
 ```bash
 # --gpus all command will cause error if your pc has no gpu!
@@ -34,7 +66,8 @@ Step5. Git clone this project in tf folder
  git clone https://github.com/advapplab/esg_twitterbot.git
  cd esg_twitterbot
  ```
-Step6. Use jupyter notebook upload credential.json into modules folder (from Wei)
+Step6. Use jupyter notebook upload credential.json(from Wei) into modules folder 
+
 Step7. Pip install from the given requirements file && Execute python script to download finetune model (About 2hrs)
   ```bash
   pip install -r requirements3.7.txt

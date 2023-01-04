@@ -28,7 +28,7 @@ for eachNew in prevDayNews:
     esgNews = pd.concat([esgNews, pd.DataFrame([{"content": sentence.replace('\xa0',' '), "url": eachNew["url"], "datasource": eachNew["datasource"]} for sentence in newSentences])], ignore_index = True)
 
 # Write to TSV file
-date = str(today.tm_year) + str(today.tm_mon) + str(today.tm_mday)
+date = time.strftime("%Y%m%d", today)
 esgNews.to_csv("./esgBERT_input/esgNews_{}_full.tsv".format(date), sep='\t', header=False) # Columns contain content, url, datasource
 esgNews["content"].to_csv("./esgBERT_input/esgNews_{}.tsv".format(date), sep='\t', header=False) # Column only content
 print("esgBERT input is ready!")
@@ -36,6 +36,7 @@ print("esgBERT input is ready!")
 # Build the predict model
 model = PredictModel()
 model.get_config()
+
 # Predict and Combine the result
 predict_msg = model.run_model("esgNews_{}.tsv".format(date))
 predict_msg = model.combine_predict_result("esgNews_{}.tsv".format(date))
@@ -48,10 +49,14 @@ one_hot_df = pd.DataFrame(np.where(filter_df.T == filter_df.T.max(), 1, 0),index
 all_df = one_hot_df.sum().to_frame(name="ESGNews")
 all_df.index.name = "ESG news"
 
-esgNews = pd.read_csv("./esgBERT_input/esgNews_{}.tsv".format(date), sep='\t', names=['idx', 'sentence'], index_col=0)
-most_ky_sentences = [esgNews.iloc[idx]["sentence"] for idx in one_hot_df.loc[one_hot_df[all_df.idxmax().values[0]] == 1].index]
+#Choose most key issues sentences
+esgNews = pd.read_csv("./esgBERT_input/esgNews_{}_full.tsv".format(date), sep='\t', names=['idx', 'sentence','url','datasource'], index_col=0)
+most_ky_indexes = list(one_hot_df.loc[one_hot_df[all_df.idxmax().values[0]] == 1].index)
+most_ky_sentences = esgNews.iloc[most_ky_indexes]
+most_ky_sentences.to_csv("./esgBERT_output/esgNews_{}_choose_sentences.csv".format(date))
+
 choose_count = 30 if len(most_ky_sentences) >= 30 else len(most_ky_sentences)
-most_ky_sentences = random.sample(most_ky_sentences,choose_count) # Choose random 30 sentences from most counts key issue
+most_ky_sentences = random.sample(list(most_ky_sentences["sentence"]),choose_count) # Choose random 30 sentences from most counts key issue
 
 # Add api key to env (including GPT-3 & Tweet API token)
 setup_api_key()
