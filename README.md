@@ -1,9 +1,10 @@
 # esg_twitterbot
 Step1. Docker run container use tensorflow image
 ```bash
+# --gpus all command will cause error if your pc has no gpu!
 docker run -d --gpus all --name esgTwitterPost -p YOURPORT:8888 tensorflow/tensorflow:1.15.0-gpu-jupyter
 ```
-Step1.5. Open a container terminal to do Step 2 ~ 7
+Step1.5. Open a container terminal to do Step 2 ~ 8
 
 Step2.  Linux APT NO_PUBKEY cause GPG error solution
 ```bash
@@ -28,17 +29,18 @@ pyenv install 3.7.16 && pyenv global 3.7.16
 ```
 - Automatically install pyenv && Remember to restart shell
 
-Step5. Pip install from the given requirements file  
+Step5. Git clone this project in tf folder
  ```bash
- pip install -r requirements3.7.txt
+ git clone https://github.com/advapplab/esg_twitterbot.git
+ cd esg_twitterbot
  ```
-Step6. Git clone this project in tf folder && Execute python script to download finetune model (About 2hrs)
+Step6. Use jupyter notebook upload credential.json into modules folder (from Wei)
+Step7. Pip install from the given requirements file && Execute python script to download finetune model (About 2hrs)
   ```bash
-  git clone https://github.com/advapplab/esg_twitterbot.git
-  cd esg_twitterbot
+  pip install -r requirements3.7.txt
   python download_finetune_model.py
   ```
-Step7. Use crontab service to post tweet automatically
+Step8. Use crontab service to post tweet automatically
 ```bash
 crontab -e
 #Add a new crontab task
